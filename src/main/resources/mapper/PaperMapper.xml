@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.PaperDao">
+    <resultMap id="paperResultMap" type="Paper">
+        <id property="paperId" column="paper_id"></id>
+        <result property="paperName" column="name"></result>
+        <result property="paperNum" column="number"></result>
+        <result property="paperDetail" column="detail"></result>
+    </resultMap>
+
+    <!--实现PaperDao接口中定义的方法-->
+    <!--这里 INSERT 语法要用 VALUES 而不是 VALUE-->
+    <insert id="addPaper" parameterType="Paper">
+        INSERT INTO paper(paper_id, name, number, detail) VALUES (#{paperId}, #{paperName}, #{paperNum}, #{paperDetail})
+    </insert>
+    
+    <delete id="deletePaperById" parameterType="long">
+        DELETE FROM paper WHERE paper_id=#{paperId}
+    </delete>
+
+    <update id="updatePaper" parameterType="Paper">
+        UPDATE paper SET name=#{paperName}, number=#{paperNum}, detail=#{paperDetail} WHERE paper_id=#{paperId}
+    </update>
+
+    <!--这里 SELECT 语法中 结果集 resultMap设置为paperResultMap，如果使用resultType 为 Paper，则修改页面不会正确显示-->
+    <select id="queryById" parameterType="long" resultMap="paperResultMap">
+        SELECT paper_id, name, number, detail FROM paper WHERE paper_id=#{paperId}
+    </select>
+
+    <select id="queryAllPaper" resultMap="paperResultMap">
+        SELECT paper_id, name, number, detail FROM paper
+    </select>
+</mapper>
